@@ -1,0 +1,178 @@
+{
+  "timezone": "Asia/Manila",
+  "notes": "Create these columns in your own n8n Data Tables. n8n supplies id/createdAt/updatedAt. No live rows or credential bindings are included.",
+  "tables": [
+    {
+      "name": "appointment_system_lock",
+      "columns": [
+        {
+          "name": "owner",
+          "type": "string"
+        },
+        {
+          "name": "expires_at",
+          "type": "date"
+        },
+        {
+          "name": "lock_name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "appointments",
+      "columns": [
+        {
+          "name": "appointment_id",
+          "type": "string"
+        },
+        {
+          "name": "customer_name",
+          "type": "string"
+        },
+        {
+          "name": "email",
+          "type": "string"
+        },
+        {
+          "name": "service",
+          "type": "string"
+        },
+        {
+          "name": "booking_start",
+          "type": "date"
+        },
+        {
+          "name": "booking_end",
+          "type": "date"
+        },
+        {
+          "name": "timezone",
+          "type": "string"
+        },
+        {
+          "name": "status",
+          "type": "string"
+        },
+        {
+          "name": "manage_token",
+          "type": "string"
+        },
+        {
+          "name": "request_id",
+          "type": "string"
+        },
+        {
+          "name": "version",
+          "type": "number"
+        },
+        {
+          "name": "confirmation_status",
+          "type": "string"
+        },
+        {
+          "name": "confirmation_sent_at",
+          "type": "date"
+        },
+        {
+          "name": "reminder_24h_due",
+          "type": "date"
+        },
+        {
+          "name": "reminder_24h_status",
+          "type": "string"
+        },
+        {
+          "name": "reminder_24h_sent_at",
+          "type": "date"
+        },
+        {
+          "name": "reminder_1h_due",
+          "type": "date"
+        },
+        {
+          "name": "reminder_1h_status",
+          "type": "string"
+        },
+        {
+          "name": "reminder_1h_sent_at",
+          "type": "date"
+        },
+        {
+          "name": "cancelled_at",
+          "type": "date"
+        },
+        {
+          "name": "last_email_message_id",
+          "type": "string"
+        },
+        {
+          "name": "last_email_error",
+          "type": "string"
+        },
+        {
+          "name": "is_test",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "name": "appointment_operator_keys",
+      "columns": [
+        {
+          "name": "key_name",
+          "type": "string"
+        },
+        {
+          "name": "token_hash",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "appointment_audit_log",
+      "columns": [
+        {
+          "name": "operation_id",
+          "type": "string"
+        },
+        {
+          "name": "actor_id",
+          "type": "string"
+        },
+        {
+          "name": "actor_name",
+          "type": "string"
+        },
+        {
+          "name": "actor_role",
+          "type": "string"
+        },
+        {
+          "name": "action",
+          "type": "string"
+        },
+        {
+          "name": "entity_id",
+          "type": "string"
+        },
+        {
+          "name": "old_value",
+          "type": "string"
+        },
+        {
+          "name": "new_value",
+          "type": "string"
+        },
+        {
+          "name": "outcome",
+          "type": "string"
+        },
+        {
+          "name": "occurred_at",
+          "type": "date"
+        }
+      ]
+    }
+  ]
+}

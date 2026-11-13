@@ -1,0 +1,86 @@
+{
+  "name": "automated-follow-up-appointment-booking-crm",
+  "version": "1.0.0",
+  "description": "Appointment Booking CRM with Volt Bootstrap 5, cash transaction history, client profiles, reports, and n8n Gmail reminders.",
+  "main": "gulpfile.js",
+  "scripts": {
+    "dev": "gulp prepare && node --watch --watch-preserve-output scripts/dev-server.cjs",
+    "start": "npm run dev",
+    "build": "gulp build:dist",
+    "check": "node --check scripts/dev-server.cjs && node --check src/assets/js/appointments.js && node scripts/verify-email.cjs",
+    "test:dashboard": "node scripts/verify-dashboard.cjs",
+    "test:calendar": "node scripts/verify-calendar.cjs",
+    "test:server": "node --test scripts/tests/dev-reload.test.cjs",
+    "test:security": "node --test scripts/tests/security.test.cjs scripts/tests/workflow-audit.test.cjs",
+    "test:access": "node scripts/verify-access.cjs",
+    "test:crm": "node --test scripts/tests/crm.test.cjs && node scripts/verify-crm.cjs",
+    "test:transactions": "node scripts/verify-transactions.cjs",
+    "test:receipts": "node --test scripts/tests/receipts.test.cjs && node scripts/verify-receipts.cjs",
+    "guide:pdf": "node scripts/build-guide.cjs",
+    "screenshots": "node scripts/capture-demo-screenshots.cjs",
+    "operator:hash": "node scripts/operator-hash.cjs"
+  },
+  "author": "adam-Dev2002",
+  "keywords": [
+    "bootstrap",
+    "bootstrap5",
+    "bootstrap-5",
+    "bootstrap 5",
+    "bootstrap 5 dashboard",
+    "bootstrap 5 admin dashboard",
+    "dashboard vanilla js",
+    "admin dashboard vanilla js",
+    "bootstrap template vanilla js",
+    "bootstrap 5 chart",
+    "bootstrap 5 datepicker",
+    "bootstrap 5 beta 1"
+  ],
+  "homepage": "https://github.com/adam-Dev2002/Automated-Follow-Up-Appointment-Booking-CRM",
+  "bugs": {
+    "url": "https://github.com/adam-Dev2002/Automated-Follow-Up-Appointment-Booking-CRM/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adam-Dev2002/Automated-Follow-Up-Appointment-Booking-CRM.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@popperjs/core": "^2.9.2",
+    "bootstrap": "^5.0.2",
+    "chartist": "^0.11.4",
+    "chartist-plugin-tooltips": "^0.0.17",
+    "exceljs": "4.4.0",
+    "notyf": "^3.10.0",
+    "nouislider": "^15.2.0",
+    "onscreen": "^1.4.0",
+    "sass": "^1.47.0",
+    "simplebar": "^5.3.4",
+    "smooth-scroll": "^16.1.3",
+    "sweetalert2": "^11.0.18",
+    "vanillajs-datepicker": "^1.2.0",
+    "waypoints": "^4.0.1"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.27.4",
+    "del": "^6.0.0",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^8.0.0",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-cssbeautify": "^3.0.0",
+    "gulp-file-include": "^2.3.0",
+    "gulp-header": "^2.0.9",
+    "gulp-htmlmin": "^5.0.1",
+    "gulp-npm-dist": "^1.0.3",
+    "gulp-plumber": "^1.2.1",
+    "gulp-rename": "^2.0.0",
+    "gulp-sass": "^5.0.0",
+    "gulp-sourcemaps": "^3.0.0",
+    "gulp-uglify": "^3.0.2",
+    "gulp-wait": "^0.0.2",
+    "merge-stream": "^2.0.0",
+    "playwright": "^1.65.0"
+  },
+  "engines": {
+    "node": ">=22.17.0"
+  }
+}

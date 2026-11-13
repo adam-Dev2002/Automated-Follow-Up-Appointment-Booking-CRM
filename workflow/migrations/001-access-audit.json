@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "tables": [
+    {
+      "name": "appointment_audit_log",
+      "columns": [
+        {
+          "name": "operation_id",
+          "type": "string"
+        },
+        {
+          "name": "actor_id",
+          "type": "string"
+        },
+        {
+          "name": "actor_name",
+          "type": "string"
+        },
+        {
+          "name": "actor_role",
+          "type": "string"
+        },
+        {
+          "name": "action",
+          "type": "string"
+        },
+        {
+          "name": "entity_id",
+          "type": "string"
+        },
+        {
+          "name": "old_value",
+          "type": "string"
+        },
+        {
+          "name": "new_value",
+          "type": "string"
+        },
+        {
+          "name": "outcome",
+          "type": "string"
+        },
+        {
+          "name": "occurred_at",
+          "type": "date"
+        }
+      ],
+      "id": "REPLACE_WITH_APPOINTMENT_AUDIT_LOG_TABLE_ID"
+    },
+    {
+      "name": "appointment_operator_keys",
+      "columns": [
+        {
+          "name": "key_name",
+          "type": "string"
+        },
+        {
+          "name": "token_hash",
+          "type": "string"
+        }
+      ],
+      "id": "REPLACE_WITH_APPOINTMENT_OPERATOR_KEYS_TABLE_ID"
+    }
+  ],
+  "notes": "Additive migration only. Existing appointment/lock tables and all existing data remain intact. Seed dashboard key with SHA-256 of .local/operator-token; never export the token."
+}

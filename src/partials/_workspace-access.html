@@ -1,0 +1,38 @@
+<div class="modal fade" id="workspace-account-modal" tabindex="-1" aria-labelledby="workspace-account-title" aria-hidden="true"><div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable"><div class="modal-content">
+  <div class="modal-header"><h2 class="modal-title h4" id="workspace-account-title">Your workspace account</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+  <div class="modal-body">
+    <div class="alert alert-danger" id="account-error" role="alert" hidden></div>
+    <div id="account-identity" class="workspace-identity mb-4"></div>
+    <div id="owner-controls" hidden>
+      <ul class="nav nav-pills gap-2 mb-4" role="tablist"><li class="nav-item" role="presentation"><button type="button" class="nav-link active" id="accounts-tab" data-bs-toggle="pill" data-bs-target="#accounts-pane" role="tab" aria-controls="accounts-pane" aria-selected="true">Accounts</button></li><li class="nav-item" role="presentation"><button type="button" class="nav-link" id="audit-tab" data-bs-toggle="pill" data-bs-target="#audit-pane" role="tab" aria-controls="audit-pane" aria-selected="false">Audit log</button></li></ul>
+      <div class="tab-content">
+        <section class="tab-pane fade show active" id="accounts-pane" role="tabpanel" aria-labelledby="accounts-tab">
+          <h3 class="h6">Workspace accounts</h3><p class="small text-gray-500">Staff can manage bookings. Owners can also manage accounts and read the audit log.</p>
+          <div class="table-responsive mb-4"><table class="table align-middle workspace-accounts-table"><thead><tr><th>Person</th><th>Role</th><th>Access</th><th>Account actions</th></tr></thead><tbody id="account-rows"></tbody></table></div>
+          <h3 class="h6">Add an account</h3>
+          <form id="account-create-form" class="row g-3">
+            <div class="col-sm-6"><label class="form-label" for="account-name">Name</label><input class="form-control" id="account-name" maxlength="120" required autocomplete="off"></div>
+            <div class="col-sm-6"><label class="form-label" for="account-username">Username</label><input class="form-control" id="account-username" minlength="3" maxlength="64" pattern="[A-Za-z0-9][A-Za-z0-9._\-]{2,63}" required autocomplete="off"></div>
+            <div class="col-sm-6"><label class="form-label" for="account-password">Initial password</label><input class="form-control" id="account-password" type="password" minlength="12" maxlength="128" required autocomplete="new-password"></div>
+            <div class="col-sm-6"><label class="form-label" for="account-role">Role</label><select class="form-select" id="account-role"><option value="staff">Staff</option><option value="owner">Owner</option></select></div>
+            <div class="col-12"><button type="submit" class="btn btn-success" id="account-create-submit">Add account</button></div>
+          </form>
+        </section>
+        <section class="tab-pane fade" id="audit-pane" role="tabpanel" aria-labelledby="audit-tab">
+          <form id="audit-filter-form" class="d-flex gap-2 flex-wrap mb-3"><label class="visually-hidden" for="audit-reference">Booking reference</label><input class="form-control w-auto flex-grow-1" id="audit-reference" placeholder="Booking reference (optional)" maxlength="200"><button class="btn btn-outline-info" type="submit" id="audit-refresh">Refresh log</button></form>
+          <h3 class="h6">Activity history</h3><p class="text-gray-500 audit-description">See who signed in and changed accounts or bookings. Expand an entry to see what changed. History starts when activity logging was enabled.</p><p class="small text-gray-500">“Needs review” means a change was requested, but its final result has not been recorded.</p>
+          <div class="alert alert-warning small" id="audit-warning" hidden></div>
+          <div class="table-responsive"><table class="table align-middle workspace-audit-table"><thead><tr><th>When (Asia/Manila)</th><th>Person</th><th>What happened</th><th>Result</th><th>What changed</th></tr></thead><tbody id="audit-rows"></tbody></table></div>
+          <p id="audit-empty" class="text-gray-500" hidden>No recorded changes match this booking reference.</p>
+          <button class="btn btn-sm btn-outline-info mt-3" type="button" id="audit-more" hidden>Load earlier events</button>
+        </section>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button><button type="button" class="btn btn-outline-dark" id="account-logout">Sign out</button></div>
+</div></div></div>
+<div class="modal fade" id="account-confirm-modal" tabindex="-1" aria-labelledby="account-confirm-title" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><form id="account-confirm-form">
+  <div class="modal-header"><h2 class="modal-title h4" id="account-confirm-title">Confirm account change</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+  <div class="modal-body"><p id="account-confirm-description"></p><p class="small text-gray-500">This signs the account out on all devices.</p><div id="account-reset-field" hidden><label class="form-label" for="account-reset-password">New password</label><input class="form-control" id="account-reset-password" type="password" minlength="12" maxlength="128" autocomplete="new-password" disabled></div><div class="alert alert-danger mt-3" id="account-confirm-error" role="alert" hidden></div></div>
+  <div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Go back</button><button class="btn btn-danger" type="submit" id="account-confirm-submit">Confirm change</button></div>
+</form></div></div></div>

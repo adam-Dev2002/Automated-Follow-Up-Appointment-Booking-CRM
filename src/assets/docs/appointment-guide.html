@@ -1,0 +1,123 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Appoint user guide</title><style>
+    @page{size:A4;margin:17mm 17mm 19mm}*{box-sizing:border-box}body{font:10pt/1.55 Arial,Helvetica,sans-serif;color:#374151;margin:0}h1{font-size:25pt;color:#5f419c;line-height:1.2;margin:0 0 6mm;border-left:5px solid #d4c1ef;padding-left:5mm}h2{font-size:14pt;color:#5f419c;margin:7mm 0 3mm;break-after:avoid}h3{font-size:12pt;color:#374151}p{margin:0 0 3mm}h1+p{color:#806f99;background:#f4effc;border-radius:5px;padding:3mm;margin-bottom:5mm}li{margin-bottom:2.5mm;padding-left:1mm}ol,ul{padding-left:6mm;margin:0 0 4mm}strong{color:#34334f}a{color:#7053c1;text-decoration:none;overflow-wrap:anywhere}.pagebreak{break-before:page}h2:first-child{margin-top:0}li,p{orphans:2;widows:2}ul li::marker{color:#a885d6}ol li::marker{color:#7053c1;font-weight:bold}@media screen{body{max-width:800px;margin:40px auto;padding:30px;background:white}html{background:#f3f1f8}.pagebreak{height:30px;border-top:1px solid #ddd;margin-top:30px}}
+    </style></head><body><h1>Appoint — Appointment Booking &amp; Follow-up Guide</h1>
+<p>Owner, staff, and customer instructions · Asia/Manila (UTC+8)</p>
+<h2>What the system does</h2>
+<p>Appoint uses your Volt Bootstrap 5 dashboard to create and manage appointments. The connected n8n workflow validates requests, checks overlapping bookings, stores appointments in its data table, and sends confirmations and eligible reminders through Gmail.</p>
+<p>The current dashboard runs locally at <a href="http://localhost:3002">http://localhost:3002</a>. It is for the business owner or staff. Create the first owner account on the setup screen, then sign in. Owners add staff accounts and read the audit log using the account button in the top bar. Separate customer accounts and a public customer booking page have not been implemented. A customer on another device cannot use your localhost address.</p>
+<h2>Owner or staff: create an appointment</h2>
+<ol>
+<li>Keep n8n and the dashboard server running. Open the dashboard and use <strong>Check connection</strong>. A passing check verifies the booking API and request validation; it does not verify Gmail delivery.</li>
+<li>Click <strong>New appointment</strong>.</li>
+<li>Enter the customer&#39;s full name, email address, and service.</li>
+<li>Select the date, start time, and duration. All entered times use <strong>Asia/Manila</strong>, even if your computer uses another timezone.</li>
+<li>Click <strong>Create appointment</strong>. The workflow checks that the time is in the future and does not overlap another confirmed appointment. If the time is unavailable, choose another time.</li>
+<li>A successful appointment appears in the list. Open its details to view the booking reference, management token, and email follow-up results.</li>
+<li>If a request times out, retry the unchanged form. It reuses the request ID to avoid creating a duplicate booking.</li>
+</ol>
+<p>The calendar reads the protected shared appointment source. It is not an availability picker: choosing a blank day does not guarantee every time on that day is available. The supplied workflow uses one shared calendar rather than separate staff calendars.</p>
+<h2>Customer: request an appointment</h2>
+<ol>
+<li>Contact the business using its usual phone, message, or email channel.</li>
+<li>Give your name, email address, requested service, and preferred appointment time.</li>
+<li>Staff enters the booking through the dashboard.</li>
+<li>When Gmail delivery is working, the workflow sends a confirmation with the service, time, booking reference, and management token.</li>
+<li>Keep the reference and token private. Contact the business if you need a different time or want to cancel.</li>
+</ol>
+<div class="pagebreak"></div>
+<h2>Reschedule or cancel</h2>
+<ol>
+<li>Find the appointment using search, the status filters, or the calendar.</li>
+<li>Open its details using the arrow at the end of the row.</li>
+<li>Choose <strong>Reschedule</strong>, select a new time and duration, and save. The workflow checks for conflicts and recalculates reminder times.</li>
+<li>To cancel, choose <strong>Cancel appointment</strong>, review the action, and submit. Cancellation stops the remaining reminders and queues a cancellation message.</li>
+</ol>
+<p>Appointments that have already started cannot be rescheduled or cancelled by this workflow. A cancelled appointment cannot be rescheduled; create a new booking instead.</p>
+<p>If the booking is not saved in this browser, use <strong>Manage by reference</strong> and enter its reference and 64-character management token from the confirmation email.</p>
+<h2>Client photos and logos</h2>
+<p>Client identities use the same photo, logo, or initials across Overview, Appointments, Calendar, Clients, and Transactions. Click a linked client name or avatar to open their profile. These are client records, not separate customer sign-in accounts.</p>
+<ol>
+<li>Open <strong>Clients</strong> and choose the client, or click their linked name/avatar elsewhere.</li>
+<li>Under <strong>Client photo or logo</strong>, choose a JPG, PNG, or WebP image up to 5 MB.</li>
+<li>The image is resized and saved to the client profile in the local SQLite database. It is shared across browser sessions.</li>
+<li>Use <strong>Remove photo</strong> to restore initials. Existing browser-saved photos remain a fallback until a shared photo is saved or removed.</li>
+</ol>
+<p>The app does not fetch private Google profile photos from an email address.</p>
+<h2>Transaction history</h2>
+<p><strong>Transactions</strong> opens actual payment and refund history, with one row per recorded transaction. Unpaid bookings are available under <strong>Booking balances / Record payment</strong>. Record only money already received or refunds already issued. Search by client, phone, email, booking reference, or receipt reference. Print any transaction using its receipt icon.</p>
+<h2>Print or email a payment receipt</h2>
+<ol>
+<li>Open <strong>Transactions</strong>. Choose a transaction, or select <strong>Booking balances / Record payment</strong>, find the booking, and choose its payment icon.</li>
+<li>Once money received or a refund has been recorded, use <strong>Print latest receipt / Save PDF</strong>. You can also print any individual receipt under <strong>Receipts and refunds</strong>.</li>
+<li>The receipt opens in a separate tab. Choose your printer or <strong>Save as PDF</strong> in the browser&#39;s print dialog.</li>
+<li>To email one receipt, choose its <strong>Send receipt</strong> button. Review the exact customer email, sending account, amount and receipt number, then confirm <strong>Send receipt</strong>.</li>
+<li>Recording a payment does not automatically email it. Opening the confirmation and choosing <strong>Go back</strong> sends nothing.</li>
+<li><strong>Waiting to send</strong> and <strong>Sending receipt</strong> mean delivery is still in progress. <strong>Sent by Gmail</strong> means Gmail accepted it; it does not guarantee arrival in the customer&#39;s inbox.</li>
+<li>If delivery needs review, check the sending account before sending another copy. The system does not automatically repeat an uncertain send.</li>
+</ol>
+<p>Receipts show the recorded payment or refund, booking details and the balance when prepared. Internal staff notes and private booking management codes are excluded. Test bookings can be printed as test copies but cannot email receipts. This app records money paid elsewhere; it does not charge a card.</p>
+<p>The Calendar keeps the bookings list beside the month on desktop. Scroll within that list to see more bookings without stretching the month cells. Select a day to narrow the list. On a smaller screen, the compact month appears above the scrollable list.</p>
+<h2>Understanding your dashboard</h2>
+<ul>
+<li><strong>Total appointments:</strong> records saved in the current browser.</li>
+<li><strong>Upcoming:</strong> saved confirmed appointments whose start time is still in the future.</li>
+<li><strong>Today&#39;s appointments:</strong> saved confirmed appointments starting today in Asia/Manila.</li>
+<li><strong>Cancelled:</strong> saved records that were cancelled.</li>
+<li><strong>Search:</strong> matches customer name, email, service, or booking reference.</li>
+<li><strong>Calendar:</strong> selecting a date filters the the calendar agenda. Use <strong>Clear date</strong> or <strong>Today</strong> to remove that date filter.</li>
+<li><strong>Refresh delivery:</strong> reads current notification results from n8n for saved bookings with a management token. This requires the workflow&#39;s protected status action to be published.</li>
+</ul>
+<p>The browser list is a local cache. Bookings created elsewhere and external changes do not automatically populate it. Clearing browser storage removes the local list, legacy browser photos, and saved tokens; it does not delete the actual n8n bookings.</p>
+<div class="pagebreak"></div>
+<h2>Automated confirmations and reminders</h2>
+<p>The workflow queues a confirmation after a new booking, reschedule, or cancellation. It checks due notifications every minute and schedules a 24-hour reminder and a 1-hour reminder for eligible confirmed appointments.</p>
+<p>Emails include the Appoint logo, bold service details, a highlighted appointment date and time, booking reference, and clear instructions. Customers can reply with their booking reference and requested change; staff reviews the reply and updates the dashboard. Email replies are not automatically processed as booking changes.</p>
+<p>For a Monday 10:00 AM appointment booked several days ahead, reminders are due Sunday at 10:00 AM and Monday at 9:00 AM. All of these times use Asia/Manila.</p>
+<p>A reminder whose deadline has already passed when booking is skipped. For example, an appointment booked two hours ahead can receive its 1-hour reminder but skips the 24-hour reminder. Stopping the computer, Docker, or n8n prevents local scheduled follow-ups from running.</p>
+<h2>What delivery labels mean</h2>
+<ul>
+<li><strong>Queued / pending:</strong> the message is waiting for processing.</li>
+<li><strong>Sending:</strong> a workflow execution has claimed the message.</li>
+<li><strong>Sent by Gmail:</strong> Gmail returned a message ID. This confirms Gmail accepted the send request; it does not confirm arrival in the recipient&#39;s inbox.</li>
+<li><strong>Email failed:</strong> sending failed. Open appointment details for the recorded error and inspect the n8n execution.</li>
+<li><strong>Test delivery:</strong> the workflow simulated sending to a reserved test address. No real email was sent.</li>
+<li><strong>Skipped: booked late:</strong> the reminder deadline had already passed.</li>
+<li><strong>Cancelled:</strong> the reminder was stopped after cancellation.</li>
+<li><strong>Not checked:</strong> the dashboard has no current notification result. Click <strong>Refresh delivery</strong>.</li>
+</ul>
+<p>A successful workflow execution can still contain a failed email because the workflow records Gmail errors and continues. Check the notification result, not only the overall execution&#39;s green success label.</p>
+<h2>Troubleshooting follow-ups</h2>
+<ol>
+<li>In n8n, make sure the appointment workflow is published or active.</li>
+<li>Open <strong>Executions</strong> and select a recent scheduled run. Check that <strong>Every minute in Manila</strong> is running.</li>
+<li>Inspect <strong>Gmail appointment email</strong>, <strong>Record delivery result</strong>, and <strong>Save delivery tracking</strong> for an actual due message.</li>
+<li>If the error says <strong>Client authentication failed</strong>, reconnect the Gmail credential using the next page.</li>
+<li>After fixing Gmail, inspect failed messages before retrying. Failed notifications are not automatically retried by the current workflow. A connection check alone does not resend them.</li>
+</ol>
+<p>Addresses at example.com, example.org, example.net, and domains ending in .test or .invalid simulate email delivery. Use a real address you control for a real email test.</p>
+<div class="pagebreak"></div>
+<h2>Reconnect Gmail in n8n</h2>
+<ol>
+<li>Open <a href="http://localhost:5678">n8n</a> and select your appointment workflow.</li>
+<li>Double-click <strong>Gmail appointment email</strong>.</li>
+<li>Edit the <strong>Gmail account</strong> credential using the pencil button.</li>
+<li>Click <strong>Sign in with Google</strong> or <strong>Reconnect</strong>, select the sending account, approve access, and save. The sending account can be different from the customer or test recipient.</li>
+</ol>
+<p>If authentication still fails, check the Google OAuth configuration:</p>
+<ol start="5">
+<li>Open <a href="https://console.cloud.google.com/">Google Cloud Console</a> and select the project that owns the OAuth client used by n8n.</li>
+<li>Enable the <strong>Gmail API</strong> for that project.</li>
+<li>Open <strong>Google Auth Platform → Clients</strong>, or <strong>APIs &amp; Services → Credentials</strong>, and select the correct <strong>Web application</strong> OAuth client.</li>
+<li>Copy the current Client ID and Client Secret into the n8n credential. Keep the secret inside n8n and Google Cloud.</li>
+<li>Copy the exact <strong>OAuth Redirect URL displayed by n8n</strong> into the client&#39;s authorized redirect URIs. For the local setup, it is normally <strong>http://localhost:5678/rest/oauth2-credential/callback</strong>.</li>
+<li>If the Google app is in <strong>Testing</strong>, add the sending Google account under <strong>Audience → Test users</strong>.</li>
+<li>Sign in again from the n8n credential and save. If the workflow is inactive or has unpublished changes, publish it after saving.</li>
+<li>Run a clearly labelled test booking to an address you control. Verify the Gmail node returns a message ID, the appointment notification is marked sent, and the message arrives in the test inbox.</li>
+</ol>
+<p>Official setup references: <a href="https://docs.n8n.io/integrations/builtin/credentials/google/oauth-single-service/">n8n Google OAuth2 credentials</a>, <a href="https://developers.google.com/workspace/guides/create-credentials">Google OAuth client setup</a>, and <a href="https://developers.google.com/workspace/gmail/api/quickstart/js">Google Gmail API setup</a>.</p>
+<h2>Start the local dashboard again</h2>
+<p>Open PowerShell in the project directory. Run <strong>npm.cmd install</strong> once if dependencies are missing, then <strong>npm.cmd run dev</strong>. Visit <strong>http://localhost:3002</strong>. Keep the terminal open; use Ctrl+C to stop it.</p>
+<p>Source edits rebuild automatically. Refresh the page after the terminal reports that the dashboard was updated. Your saved browser data remains available when you use the same origin and browser profile.</p>
+<h2>What is still outside this local version</h2>
+<p>Public customer self-booking, a complete shared listing in the original calendar/overview, business-hour rules, staff calendars, online card charging, and guaranteed email receipt are not part of the current implementation. Owner/staff authentication, readable activity history, Clients, payment recording in PHP, Reports, and Excel/CSV downloads are available. Use [the testing guide](TESTING-GUIDE.md) and [setup instructions](docs/SETUP.md) for the current screens.</p>
+<p>This guide describes the actual dashboard and workflow behavior. Delivery must be verified using the live notification results and your test inbox.</p></body></html>

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in — Appointment Booking CRM</title>
+  <link rel="icon" type="image/png" href="/assets/img/brand/appointment-booking-crm.png">
+  <link rel="stylesheet" href="/css/volt.css">
+  <link rel="stylesheet" href="/assets/css/appointments.css">
+</head>
+<body>
+  <main class="container min-vh-100 d-flex align-items-center justify-content-center py-5">
+    <section class="card border-0 shadow-sm w-100" style="max-width:480px" aria-labelledby="access-title">
+      <div class="card-body p-4 p-sm-5">
+        <img class="access-brand-logo mb-4" src="/assets/img/brand/appointment-booking-crm.png" width="1280" height="1280" alt="Appointment Booking CRM">
+        <h1 class="h4" id="access-title">Sign in</h1>
+        <p class="text-gray-500" id="access-description">Sign in to manage your workspace.</p>
+        <div class="alert alert-danger" id="access-error" role="alert" hidden></div>
+        <form id="access-form">
+          <div class="mb-3" id="access-name-field" hidden><label class="form-label" for="access-name">Your name</label><input class="form-control" id="access-name" maxlength="120" autocomplete="name" disabled></div>
+          <div class="mb-3"><label class="form-label" for="access-username">Username</label><input class="form-control" id="access-username" minlength="3" maxlength="64" pattern="[A-Za-z0-9][A-Za-z0-9._\-]{2,63}" autocomplete="username" required></div>
+          <div class="mb-3"><label class="form-label" for="access-password">Password</label><input class="form-control" id="access-password" type="password" maxlength="128" autocomplete="current-password" required></div>
+          <div class="mb-3" id="access-repeat-field" hidden><label class="form-label" for="access-repeat">Confirm password</label><input class="form-control" id="access-repeat" type="password" maxlength="128" autocomplete="new-password" disabled></div>
+          <button type="submit" class="btn btn-info w-100" id="access-submit" disabled>Sign in</button>
+        </form>
+        <p class="small text-gray-500 mt-4 mb-0" id="access-footnote">Owner and staff access only.</p>
+        <noscript><p class="alert alert-warning mt-3">Enable JavaScript to sign in.</p></noscript>
+      </div>
+    </section>
+  </main>
+  <script src="/assets/js/access.js"></script>
+</body>
+</html>

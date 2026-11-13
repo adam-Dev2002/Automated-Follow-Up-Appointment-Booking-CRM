@@ -1,0 +1,22 @@
+<!-- Adapted from the supplied Volt dashboard sidebar partial. -->
+<nav id="app-sidebar" class="sidebar d-lg-block bg-gray-800 text-white collapse" aria-label="Main navigation">
+  <div class="sidebar-inner px-4 pt-4 d-flex flex-column h-100">
+    <a href="#overview" class="brand-link mb-4" aria-label="Appointment Booking CRM overview"><span class="brand-symbol" aria-hidden="true"><img class="brand-logo" src="/assets/img/brand/appointment-booking-crm.png" width="1280" height="1280" alt=""></span><span class="brand-wordmark">Appointment<span>Booking <span class="brand-crm">CRM</span></span></span></a>
+    <div class="sidebar-heading px-2 mb-2 text-gray-500">Workspace</div>
+    <ul class="nav flex-column mb-4">
+      <li class="nav-item active"><a href="#overview" class="nav-link active" data-view="overview"><span class="sidebar-icon"><svg class="ai"><use href="#i-grid"/></svg></span><span class="sidebar-text">Overview</span></a></li>
+      <li class="nav-item"><a href="#appointments" class="nav-link" data-view="appointments"><span class="sidebar-icon"><svg class="ai"><use href="#i-calendar"/></svg></span><span class="sidebar-text">Appointments</span><span class="badge bg-secondary text-dark ms-auto" id="nav-count">0</span></a></li>
+      <li class="nav-item"><a href="#calendar" class="nav-link" data-view="calendar"><span class="sidebar-icon"><svg class="ai"><use href="#i-clock"/></svg></span><span class="sidebar-text">Calendar</span></a></li>
+      <li class="nav-item"><a href="#clients" class="nav-link" data-view="clients"><span class="sidebar-icon"><svg class="ai"><use href="#i-users"/></svg></span><span class="sidebar-text">Clients</span></a></li>
+      <li class="nav-item"><a href="#payments" class="nav-link" data-view="payments"><span class="sidebar-icon"><svg class="ai"><use href="#i-wallet"/></svg></span><span class="sidebar-text">Transactions</span></a></li>
+      <li class="nav-item crm-owner-only" hidden><a href="#reports" class="nav-link" data-view="reports"><span class="sidebar-icon"><svg class="ai"><use href="#i-chart"/></svg></span><span class="sidebar-text">Reports</span></a></li>
+      <li class="nav-item"><a href="#automation" class="nav-link" data-view="automation"><span class="sidebar-icon"><svg class="ai"><use href="#i-bell"/></svg></span><span class="sidebar-text">Automated reminders</span></a></li>
+    </ul>
+    <div class="sidebar-help rounded p-3 mb-4"><svg class="ai text-secondary mb-2"><use href="#i-bell"/></svg><h2 class="h6 text-white mb-2">Less follow-up. More time.</h2><p class="small text-gray-400 mb-2">Confirmations and reminders, handled by your n8n workflow.</p><a href="#automation" class="text-secondary small">View automation <svg class="ai ai-sm"><use href="#i-arrow"/></svg></a></div>
+    <div class="mt-auto pb-4">
+      <a class="nav-link px-2 text-gray-300 mb-2" href="/assets/docs/appointment-guide.pdf" target="_blank" rel="noopener"><svg class="ai me-2"><use href="#i-info"/></svg>PDF user guide</a>
+      <button type="button" class="nav-link connection-nav text-gray-300 border-0 bg-transparent px-2 mb-3" data-bs-toggle="modal" data-bs-target="#connection-modal"><svg class="ai me-2"><use href="#i-settings"/></svg>Connection settings</button>
+      <div class="border-top border-gray-700 pt-3 small text-gray-400"><span id="sidebar-status-dot" class="status-dot neutral me-2"></span><span id="sidebar-status">Checking connection</span></div>
+    </div>
+  </div>
+</nav>

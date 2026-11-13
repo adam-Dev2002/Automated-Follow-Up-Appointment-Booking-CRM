@@ -1,0 +1,239 @@
+{
+  "name": "Appointment Booking CRM — confirmed payment receipt emails",
+  "nodes": [
+    {
+      "id": "95c8fd7d4106a8eec92e6e4ae17c8b22",
+      "name": "Check queued receipts",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "c95ae002610dabacf423fcbe5ceeaa0c",
+      "name": "Read Gmail sending account",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "parameters": {
+        "url": "https://gmail.googleapis.com/gmail/v1/users/me/profile",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "gmailOAuth2",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "position": [
+        220,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 1000
+    },
+    {
+      "id": "66712c0c9fd9da9b9cfc62f877df96bf",
+      "name": "Claim one receipt",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3002/api/receipt-emails",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({action:'claim',execution_id:$execution.id,sender_email:$json.emailAddress}) }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "id": "d96b9e4833e7607e41a1314861da5666",
+      "name": "Receipt waiting?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ !!$json.job }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "position": [
+        660,
+        0
+      ]
+    },
+    {
+      "id": "6ed7bbb2869e58a0700512efbbf5cd6a",
+      "name": "Gmail receipt email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "parameters": {
+        "sendTo": "={{ $json.job.to }}",
+        "subject": "={{ $json.job.subject }}",
+        "emailType": "html",
+        "message": "={{ $json.job.html }}",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "Appointment Booking CRM"
+        }
+      },
+      "position": [
+        880,
+        0
+      ],
+      "onError": "continueRegularOutput",
+      "retryOnFail": false
+    },
+    {
+      "id": "84909fde6288bca3167857948e874ee1",
+      "name": "Record receipt result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "parameters": {
+        "jsCode": "const claim = $('Claim one receipt').first().json;\nconst result = $input.first().json;\nconst id = typeof result.id === 'string' && /^[a-f0-9]{6,100}$/i.test(result.id) ? result.id : '';\nreturn [{json:{action:'result',job_id:claim.job.id,execution_id:$execution.id,outcome:!result.error && id?'sent':'uncertain',gmail_message_id:!result.error?id:''}}];"
+      },
+      "position": [
+        1100,
+        0
+      ]
+    },
+    {
+      "id": "2822ba10a564f014b419df83f460a048",
+      "name": "Confirm receipt result",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:3002/api/receipt-emails",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "position": [
+        1320,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 1000
+    }
+  ],
+  "connections": {
+    "Check queued receipts": {
+      "main": [
+        [
+          {
+            "node": "Read Gmail sending account",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Gmail sending account": {
+      "main": [
+        [
+          {
+            "node": "Claim one receipt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claim one receipt": {
+      "main": [
+        [
+          {
+            "node": "Receipt waiting?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Receipt waiting?": {
+      "main": [
+        [
+          {
+            "node": "Gmail receipt email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Gmail receipt email": {
+      "main": [
+        [
+          {
+            "node": "Record receipt result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Record receipt result": {
+      "main": [
+        [
+          {
+            "node": "Confirm receipt result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Manila",
+    "executionTimeout": 120,
+    "saveDataSuccessExecution": "all",
+    "saveDataErrorExecution": "all",
+    "saveManualExecutions": false
+  },
+  "active": false
+}
