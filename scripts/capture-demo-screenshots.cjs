@@ -20,6 +20,7 @@ const notifications={confirmation:{status:'test_sent',sent_at:new Date().toISOSt
 
 (async()=>{
     fs.mkdirSync(output,{recursive:true});
+    fs.mkdirSync(path.join(output,'full'),{recursive:true});
     execFileSync(process.execPath,[path.join(root,'node_modules/gulp/bin/gulp.js'),'prepare'],{cwd:root,windowsHide:true,stdio:'pipe'});
     const upstream=http.createServer(async(req,res)=>{
         const chunks=[];for await(const chunk of req)chunks.push(chunk);
@@ -55,23 +56,45 @@ const notifications={confirmation:{status:'test_sent',sent_at:new Date().toISOSt
         const logo=await page.evaluate(()=>{const c=document.createElement('canvas');c.width=128;c.height=128;const x=c.getContext('2d');x.fillStyle='#2361ce';x.fillRect(0,0,128,128);x.fillStyle='#fff';x.font='bold 44px Arial';x.textAlign='center';x.fillText('MS',64,81);return c.toDataURL('image/png');});
         const maya=imported.clients.find(row=>row.email==='maya@example.test');await api('/api/crm/clients/'+maya.id+'/avatar','PUT',{image:logo,version:0});
         await page.reload({waitUntil:'networkidle'});
-        async function capture(file){await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:path.join(output,file),fullPage:true,animations:'disabled'});}
+        async function ready(){
+            await page.evaluate(async()=>{
+                window.scrollTo({top:0,left:0,behavior:'instant'});
+                document.getElementById('app-sidebar').scrollTop=0;
+                await document.fonts.ready;
+                await Promise.all(Array.from(document.images).filter(image=>image.offsetParent!==null).map(image=>image.decode().catch(()=>{})));
+            });
+        }
+        async function capture(file){
+            await ready();const desktop=page.viewportSize().width>=992;
+            if(desktop){
+                const layout=await page.evaluate(()=>({overflow:document.documentElement.scrollWidth>innerWidth,rail:getComputedStyle(document.body).backgroundImage,sidebarTop:document.getElementById('app-sidebar').getBoundingClientRect().top}));
+                if(layout.overflow||!layout.rail.includes('linear-gradient')||layout.sidebarTop!==0)throw Error('Inconsistent desktop workspace layout: '+file);
+            }
+            await page.screenshot({path:path.join(output,file),fullPage:!desktop,animations:'disabled'});
+            if(desktop)await page.screenshot({path:path.join(output,'full',file),fullPage:true,animations:'disabled'});
+        }
         await page.locator('#booking-rows tr').first().waitFor();await capture('overview.png');
         await page.locator('[data-view="appointments"]').click();await capture('appointments.png');
         await page.locator('[data-view="calendar"]').click();await page.locator('#calendar-agenda-list li').first().waitFor();await capture('calendar.png');
         await page.locator('[data-view="clients"]').click();await page.locator('#crm-client-rows tr').first().waitFor();await capture('clients.png');
         await page.locator('#crm-client-rows [data-client-profile="'+maya.id+'"]').click();await page.locator('#crm-client-modal').waitFor({state:'visible'});
-        await page.locator('#crm-client-modal .modal-content').screenshot({path:path.join(output,'client-profile.png'),animations:'disabled'});
+        await ready();await page.screenshot({path:path.join(output,'client-profile.png'),animations:'disabled'});
         await page.locator('#crm-client-modal .btn-close').click();await page.locator('#crm-client-modal').waitFor({state:'hidden'});
         await page.locator('[data-view="payments"]').click();await page.locator('#crm-transaction-rows tr').first().waitFor();await capture('transactions.png');
         await page.locator('[data-view="reports"]').click();await page.locator('#crm-report-stats .crm-report-stat').first().waitFor();await capture('reports.png');
-        await page.locator('[data-view="automation"]').click();await capture('reminders.png');
+        await page.locator('[data-view="automation"]').click();
+        const reminderAligned=await page.evaluate(()=>{const card=document.getElementById('automation-section').getBoundingClientRect(),banner=document.getElementById('connection-banner').getBoundingClientRect();return Math.abs(card.left-banner.left)<2&&Math.abs(card.right-banner.right)<2;});
+        if(!reminderAligned)throw Error('Reminder card must align with the shared page content.');
+        await capture('reminders.png');
+        await page.setViewportSize({width:1280,height:600});
+        const shortSidebar=await page.evaluate(()=>{const sidebar=document.getElementById('app-sidebar');sidebar.scrollTop=sidebar.scrollHeight;const bottom=document.getElementById('sidebar-status').getBoundingClientRect().bottom;sidebar.scrollTop=0;return{bottom,viewport:innerHeight,brandTop:document.querySelector('.brand-link').getBoundingClientRect().top};});
+        if(shortSidebar.bottom>shortSidebar.viewport||shortSidebar.brandTop<0)throw Error('Sidebar controls must remain reachable on shorter screens.');
         await page.setViewportSize({width:390,height:844});
         await page.locator('[data-view="reports"]').evaluate(link=>link.click());await page.locator('#crm-report-stats .crm-report-stat').first().waitFor();await capture('reports-mobile.png');
         await page.locator('[data-view="payments"]').evaluate(link=>link.click());await page.locator('#crm-transaction-rows tr').first().waitFor();await capture('transactions-mobile.png');
         if(errors.length)throw Error('Browser errors in demo: '+errors.join('; '));
-        fs.writeFileSync(path.join(output,'README.md'),'# Application screenshots\n\nGenerated from the actual application with fictional clients and a disposable database. No production database, live n8n workflow, or Gmail account is contacted.\n\nRegenerate with `npm run screenshots`. Dates follow the current Asia/Manila calendar.\n');
-        console.log('Created 10 demo screenshots in docs/screenshots. All clients, accounts, bookings, and transactions are fictional; no emails were sent.');
+        fs.writeFileSync(path.join(output,'README.md'),'# Application screenshots\n\nGenerated from the actual application with fictional clients and a disposable database. No production database, live n8n workflow, or Gmail account is contacted.\n\nDesktop previews all use a 1440 x 1050 viewport, including the client modal. Complete page captures are in `full/`; mobile captures retain their full page so the details remain available. The sidebar rail and card alignment are application styles, not screenshot edits.\n\nRegenerate with `npm run screenshots`. Dates follow the current Asia/Manila calendar.\n');
+        console.log('Created 10 primary demo screenshots and 7 full-page views. Layout checks passed; all data is fictional and no emails were sent.');
         await context.close();
     }finally{await browser?.close();await fixture?.close();await new Promise(resolve=>upstream.close(resolve));}
 })().catch(error=>{console.error(error);process.exitCode=1;});

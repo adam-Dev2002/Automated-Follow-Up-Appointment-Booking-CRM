@@ -8,6 +8,8 @@ A local appointment workspace for business owners and staff, built with **Volt /
 
 ## Application screenshots
 
+Desktop previews use the same 1440 x 1050 application viewport. Click an image to inspect it. Complete [overview](docs/screenshots/full/overview.png), [reports](docs/screenshots/full/reports.png), and [reminders](docs/screenshots/full/reminders.png) pages are available separately.
+
 | Calendar | Clients |
 | --- | --- |
 | ![Shared calendar with demo appointments](docs/screenshots/calendar.png) | ![Client directory with linked avatars](docs/screenshots/clients.png) |
@@ -60,7 +62,7 @@ npx playwright install chromium
 npm run screenshots
 ```
 
-This creates ten PNGs in `docs/screenshots/` using fictional clients, bookings, cash receipts, refunds, and a sample client logo. Temporary accounts/databases are removed when the command finishes. Your running workspace is not changed.
+This creates ten primary PNGs plus seven full-page views in `docs/screenshots/` using fictional clients, bookings, cash receipts, refunds, and a sample client logo. Temporary accounts/databases are removed when the command finishes. Your running workspace is not changed.
 
 ## Using the application
 

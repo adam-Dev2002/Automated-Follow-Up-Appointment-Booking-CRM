@@ -271,7 +271,7 @@
             overview: ['Overview', 'Appointment overview', 'A clear view of your bookings and what’s coming next.'],
             appointments: ['Appointments', 'Your appointments', 'Every booking, a little more organized.'],
             calendar: ['Calendar', 'Make room for what’s next', 'Your shared booking calendar. Choose a day to see the times, clients, and appointment details here.'],
-            automation: ['Automated reminders', 'Keep the conversation going', 'A closer look at your workflow’s appointment notifications.'],
+            automation: ['Automated reminders', 'Appointment reminders', 'Appointment notifications and instructions for business owners and clients.'],
             clients: ['Clients', 'Your clients', 'People, contact details, and their booking history.'],
             payments: ['Transactions', 'Transaction history', 'Review recorded payments and refunds, linked to each client and booking.'],
             reports: ['Reports', 'Reports manager', 'Review your numbers and download your workspace data.']

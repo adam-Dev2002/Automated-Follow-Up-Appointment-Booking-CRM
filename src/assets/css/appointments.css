@@ -8,6 +8,8 @@
 .skip-link { position:fixed; z-index:2000; background:#fff; padding:1rem; }
 .app-main { max-width:1920px; outline:none; }
 .sidebar { max-width:260px; z-index:1035; }
+.sidebar .sidebar-inner { height:auto!important; min-height:100%; overflow:visible; }
+.sidebar .sidebar-inner > * { flex-shrink:0; }
 .brand-link { display:flex; align-items:center; gap:9px; padding:4px 0; background:transparent; color:#fff; text-decoration:none; }
 .brand-link:hover { color:#fff; }
 .brand-symbol { display:block; flex:0 0 48px; width:48px; height:40px; overflow:hidden; position:relative; }
@@ -124,7 +126,7 @@
 #instruction-tabs .nav-link { font-size:.82rem; }
 .calendar-view #right-column,.automation-view #right-column { width:100%; }
 .calendar-view #calendar-section { max-width:none; margin:0; }
-.automation-view #automation-section { max-width:950px; margin:auto; }
+.automation-view #automation-section { max-width:none; margin:0; }
 .calendar-view .calendar-days .calendar-date { aspect-ratio:1.6; font-size:1rem; border:1px solid #f2eef8; }
 .calendar-view .calendar-days .calendar-date.has-bookings:after { bottom:12px; }
 .calendar-tools { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
@@ -359,7 +361,10 @@
   #workspace-account-modal .workspace-audit-table td:nth-child(2) { grid-row:1; }
   #workspace-account-modal .workspace-audit-table td:first-child { grid-row:2; }
 }
-@media(min-width:992px) { .app-main { padding-left:2rem; padding-right:2rem; } }
+@media(min-width:992px) {
+  .appointment-workspace { background:linear-gradient(to right,var(--bs-gray-800) 260px,var(--bs-gray-100) 260px); }
+  .app-main { padding-left:2rem; padding-right:2rem; }
+}
 @media(max-width:991.98px) { .sidebar { width:260px; } .sidebar-backdrop { top:0; } .app-main { margin-left:0; } }
 @media(max-width:575.98px) { .app-main { padding-left:1rem; padding-right:1rem; } .stat-card { min-height:160px; } .stat-card .display-5 { font-size:2rem; } .stat-label { font-size:.8rem; } #page-description { font-size:.8rem; } .search-wrap { max-width:100%; flex-basis:100%; } .calendar-view .calendar-days .calendar-date { aspect-ratio:1; font-size:.8rem; } .card-header,.card-body,.card-footer { padding-left:1rem; padding-right:1rem; } .next-action { width:100%; } .breadcrumb { font-size:.75rem; } }
 @media(prefers-reduced-motion:reduce) { *,*:before,*:after { animation:none!important; transition:none!important; scroll-behavior:auto!important; } }

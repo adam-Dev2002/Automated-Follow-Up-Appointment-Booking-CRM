@@ -194,6 +194,15 @@ async function closeModal(page, id) {
         await page.locator('#clear-date').click();
         await page.locator('[data-view="automation"]').click();
         await page.locator('#automation-detail').waitFor({ state: 'visible' });
+        await text(page, 'page-title', 'Appointment reminders');
+        const reminderLayout = await page.evaluate(() => {
+            const card = document.getElementById('automation-section').getBoundingClientRect();
+            const banner = document.getElementById('connection-banner').getBoundingClientRect();
+            return { left: Math.abs(card.left - banner.left), right: Math.abs(card.right - banner.right) };
+        });
+        assert.ok(reminderLayout.left < 2 && reminderLayout.right < 2, 'Reminder content aligns with the shared page width');
+        await page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' }));
+        assert.equal(await page.locator('#app-sidebar').evaluate(el => el.getBoundingClientRect().top), 0, 'Desktop sidebar remains pinned when page content scrolls');
         await page.locator('#customer-instructions-tab').click();
         await page.locator('#customer-instructions').waitFor({ state: 'visible' });
         assert.ok((await page.locator('#customer-instructions').innerText()).includes('Request a change by replying'));
